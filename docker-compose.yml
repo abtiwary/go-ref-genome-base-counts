@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  ref-gen-parser:
+    build:
+      context: . 
+      dockerfile: Dockerfile
+    volumes:
+      - .:/workspace
+    entrypoint: bash -c "cd /workspace && tail -f /dev/null"
+
