@@ -21,6 +21,8 @@ public:
 
     std::string get_version_hash();
 
+    std::string get_longest_common_subsequence(const std::string& s1, const std::string& s2);
+
 private:
     bool m_done = false;
     std::map<std::string, uint64_t> m_map_base_counts;

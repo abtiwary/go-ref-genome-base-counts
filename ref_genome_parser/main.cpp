@@ -14,5 +14,9 @@ int main() {
 
     std::cout << "This version: " << parser.get_version_hash() << '\n';
 
+    auto s1 = "sentence";
+    auto s2 = "insolent";
+    auto lcs = parser.get_longest_common_subsequence(s1, s2);
+
     return 0;
 }

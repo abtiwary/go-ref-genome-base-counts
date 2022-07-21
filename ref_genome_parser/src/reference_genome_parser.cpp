@@ -70,5 +70,55 @@ ReferenceGenomeParser::get_version_hash() {
     return GIT_HASH;
 }
 
+std::string
+ReferenceGenomeParser::get_longest_common_subsequence(
+        const std::string& s1,
+        const std::string& s2)
+{
+    if (s1.empty() || s2.empty()) {
+        return "";
+    }
+    // initialize the memoizer
+    auto memoizer = std::vector<std::vector<int>>( s1.size()+1, std::vector<int>(s2.size()+1, 0));
+    auto rows = s1.size()+1;
+    auto cols = s2.size()+1;
+    // build the memoizer matrix
+    for (auto i=1; i < rows; i++) {
+        for (auto j=1; j < cols; j++) {
+            if (s1[i-1] == s2[j-1]) {
+                memoizer[i][j] = memoizer[i-1][j-1] + 1;
+            } else {
+                memoizer[i][j] = std::max(memoizer[i-1][j], memoizer[i][j-1]);
+            }
+        }
+    }
+
+    auto total_lcs_chars = memoizer[rows-1][cols-1];
+    std::string lcs;
+    lcs.resize(total_lcs_chars);
+
+    // bottom up
+    auto chars = total_lcs_chars;
+    auto row = rows-1;
+    auto col = cols-1;
+    while(chars > 0) {
+        if (memoizer[row-1][col] != memoizer[row][col-1]) {
+            if (memoizer[row-1][col] > memoizer[row][col-1]) {
+                row = row - 1;
+            } else {
+                col = col - 1;
+            }
+        } else {
+            // diagonal
+            lcs[chars - 1] = s1[row-1];
+            chars = chars - 1;
+            row = row - 1;
+            col = col - 1;
+        }
+    }
+
+    return lcs;
+}
+
 
 } // end namespace GenomeParser
